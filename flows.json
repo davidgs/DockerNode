@@ -7,19 +7,6 @@
     "info": ""
   },
   {
-    "id": "dfcc6f2.058499",
-    "type": "tls-config",
-    "z": "",
-    "name": "",
-    "cert": "",
-    "key": "",
-    "ca": "",
-    "certname": "",
-    "keyname": "",
-    "caname": "",
-    "verifyservercert": false
-  },
-  {
     "id": "c98839a0.d0e228",
     "type": "slack-config",
     "z": "",
@@ -60,7 +47,7 @@
     "method": "POST",
     "ret": "txt",
     "paytoqs": false,
-    "url": "https://hooks.slack.com/services/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",
+    "url": "",
     "tls": "dfcc6f2.058499",
     "persist": false,
     "proxy": "",
@@ -128,7 +115,8 @@
     "y": 200,
     "wires": [
       [
-        "94cddeb6.bc2d3"
+        "94cddeb6.bc2d3",
+        "bd15ef87.1979b"
       ],
       [
         "b13de4d1.b30438"
@@ -143,7 +131,7 @@
     "func": "const TOKEN=env.get('ORBIT_TOKEN')\nconst url = 'https://app.orbit.love/questdb/activities?api_key=' + TOKEN\nconst orbit = {\n  \"title\": \"Auto-Star\",\n  \"description\": (msg.payload.action === 'deleted' ? \"UNStarred repository \" : \"Starred Repository \") + msg.payload.content.repository.name,\n  \"link\": msg.payload.content.repository.html_url,\n  \"score\": 2,\n  \"activity_type\": \"repository:star\",\n  \"occurred_at\": msg.payload.content.starred_at,\n\t\"member\": {\n    \"github\": msg.payload.content.sender.login,\n    \"email\": \"\"\n\t}\n}\nvar headers = {}\nheaders[\"Content-Type\"] = \"application/json\"\nheaders[\"Accept\"] = \"application/json\"\nmsg.url = url\nmsg.payload = orbit\nmsg.headers = headers\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 570,
+    "x": 610,
     "y": 260,
     "wires": [
       [
@@ -202,5 +190,21 @@
     "x": 960,
     "y": 200,
     "wires": []
+  },
+  {
+    "id": "bd15ef87.1979b",
+    "type": "function",
+    "z": "15570129.70a46f",
+    "name": "Slack",
+    "func": "const ENDPOINT=env.get('SLACK_TOKEN');\nconst url = \"https://hooks.slack.com/services/\" + ENDPOINT\nmsg.url = url\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 600,
+    "y": 200,
+    "wires": [
+      [
+        "eefc6f11.40d49"
+      ]
+    ]
   }
 ]
