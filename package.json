@@ -1,0 +1,14 @@
+{
+  "name": "node-red-project",
+  "description": "A Node-RED Project",
+  "version": "0.0.1",
+  "dependencies": {
+    "crypto-js": "^4.0.0",
+    "node-red-contrib-cheerio": "~1.1.0",
+    "node-red-contrib-influxdb": "~0.2.1",
+    "node-red-contrib-oauth2": "~1.1.1",
+    "node-red-contrib-protocolbuffersnode": "0.0.1",
+    "node-red-contrib-slack": "~2.0.0",
+    "node-red-node-mysql": "0.0.16"
+  }
+}
