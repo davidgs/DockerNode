@@ -1,210 +1,495 @@
 [
   {
-    "id": "15570129.70a46f",
-    "type": "tab",
-    "label": "Stars",
-    "disabled": false,
-    "info": ""
+      "id": "15570129.70a46f",
+      "type": "tab",
+      "label": "Stars",
+      "disabled": false,
+      "info": ""
   },
   {
-    "id": "c98839a0.d0e228",
-    "type": "slack-config",
-    "z": "",
-    "name": "Slack"
+      "id": "7cd6cb0f.dd278c",
+      "type": "http response",
+      "z": "15570129.70a46f",
+      "name": "Stars response",
+      "statusCode": "200",
+      "headers": {},
+      "x": 180,
+      "y": 160,
+      "wires": []
   },
   {
-    "id": "7cd6cb0f.dd278c",
-    "type": "http response",
-    "z": "15570129.70a46f",
-    "name": "Stars response",
-    "statusCode": "200",
-    "headers": {},
-    "x": 300,
-    "y": 240,
-    "wires": []
-  },
-  {
-    "id": "1c6be089.2a3ee7",
-    "type": "function",
-    "z": "15570129.70a46f",
-    "name": "verify",
-    "func": "const TOKEN = env.get('HASH_TOKEN')\nconst crypto = global.get('cryptojs')\nnewMsg = {}\n\nvar hash = \"sha1=\" + crypto.HmacSHA1(JSON.stringify(msg.req.body), TOKEN).toString(crypto.enc.Hex);\nif(hash === msg.req.headers['x-hub-signature']){\n    newMsg.vrfy = true\n} else {\n    newMsg.vrfy = false\n}\n\nnewMsg.payload = {}\nif(msg.payload.action == \"created\"){\n    newMsg.text = \":tada: A new :star: for \" + msg.payload.repository.name + \" from user \" + msg.payload.sender.login + \"! :confetti_ball:\"\n} else {\n    newMsg.text = \":x: \" + msg.payload.sender.login + \" deleted their :star: from \" + msg.payload.repository.name + \" :cry:\"\n}\n// newMsg.sum = sum\nnewMsg.hashSum = hash\nnewMsg.payload.text = newMsg.text\nnewMsg.payload.user = msg.payload.sender.login\nnewMsg.payload.action = msg.payload.action\nnewMsg.payload.content = msg.payload\nreturn newMsg;\n",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 270,
-    "y": 160,
-    "wires": [
-      [
-        "da76a9cf.e493"
+      "id": "1c6be089.2a3ee7",
+      "type": "function",
+      "z": "15570129.70a46f",
+      "name": "verify",
+      "func": "const TOKEN = env.get('HASH_TOKEN')\nconst crypto = global.get('cryptojs')\nnewMsg = {}\n\nvar hash = \"sha1=\" + crypto.HmacSHA1(JSON.stringify(msg.req.body), TOKEN).toString(crypto.enc.Hex);\nif(hash === msg.req.headers['x-hub-signature']){\n    newMsg.vrfy = true\n} else {\n    newMsg.vrfy = false\n}\n\nnewMsg.payload = {}\nif(msg.payload.action == \"created\"){\n    newMsg.text = \":tada: A new :star: for \" + msg.payload.repository.name + \" from user \" + msg.payload.sender.login + \"! :confetti_ball:\"\n} else {\n    newMsg.text = \":x: \" + msg.payload.sender.login + \" deleted their :star: from \" + msg.payload.repository.name + \" :cry:\"\n}\n// newMsg.sum = sum\nnewMsg.hashSum = hash\nnewMsg.payload.text = newMsg.text\nnewMsg.payload.user = msg.payload.sender.login\nnewMsg.payload.action = msg.payload.action\nnewMsg.payload.content = msg.payload\nreturn newMsg;\n",
+      "outputs": 1,
+      "noerr": 0,
+      "x": 230,
+      "y": 60,
+      "wires": [
+          [
+              "da76a9cf.e493"
+          ]
       ]
-    ]
   },
   {
-    "id": "eefc6f11.40d49",
-    "type": "http request",
-    "z": "15570129.70a46f",
-    "name": "Slacker",
-    "method": "POST",
-    "ret": "txt",
-    "paytoqs": false,
-    "url": "",
-    "tls": "dfcc6f2.058499",
-    "persist": false,
-    "proxy": "",
-    "authType": "bearer",
-    "x": 760,
-    "y": 200,
-    "wires": [
-      [
-        "d32b49c2.33c8b"
+      "id": "eefc6f11.40d49",
+      "type": "http request",
+      "z": "15570129.70a46f",
+      "name": "Slack",
+      "method": "POST",
+      "ret": "txt",
+      "paytoqs": false,
+      "url": "",
+      "tls": "dfcc6f2.058499",
+      "persist": false,
+      "proxy": "",
+      "authType": "bearer",
+      "x": 1370,
+      "y": 60,
+      "wires": [
+          [
+              "d32b49c2.33c8b"
+          ]
       ]
-    ]
   },
   {
-    "id": "b13de4d1.b30438",
-    "type": "debug",
-    "z": "15570129.70a46f",
-    "name": "Rejected",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "true",
-    "targetType": "full",
-    "x": 560,
-    "y": 360,
-    "wires": []
+      "id": "b13de4d1.b30438",
+      "type": "debug",
+      "z": "15570129.70a46f",
+      "name": "Rejected",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "true",
+      "targetType": "full",
+      "x": 1560,
+      "y": 140,
+      "wires": []
   },
   {
-    "id": "d37fdeaa.012e1",
-    "type": "http in",
-    "z": "15570129.70a46f",
-    "name": "stars",
-    "url": "/stars",
-    "method": "post",
-    "upload": false,
-    "swaggerDoc": "",
-    "x": 110,
-    "y": 160,
-    "wires": [
-      [
-        "7cd6cb0f.dd278c",
-        "1c6be089.2a3ee7"
+      "id": "d37fdeaa.012e1",
+      "type": "http in",
+      "z": "15570129.70a46f",
+      "name": "stars",
+      "url": "/stars",
+      "method": "post",
+      "upload": false,
+      "swaggerDoc": "",
+      "x": 90,
+      "y": 60,
+      "wires": [
+          [
+              "7cd6cb0f.dd278c",
+              "1c6be089.2a3ee7"
+          ]
       ]
-    ]
   },
   {
-    "id": "da76a9cf.e493",
-    "type": "switch",
-    "z": "15570129.70a46f",
-    "name": "",
-    "property": "vrfy",
-    "propertyType": "msg",
-    "rules": [
-      {
-        "t": "true"
-      },
-      {
-        "t": "false"
-      }
-    ],
-    "checkall": "true",
-    "repair": false,
-    "outputs": 2,
-    "x": 410,
-    "y": 200,
-    "wires": [
-      [
-        "94cddeb6.bc2d3",
-        "bd15ef87.1979b"
+      "id": "da76a9cf.e493",
+      "type": "switch",
+      "z": "15570129.70a46f",
+      "name": "Verified",
+      "property": "vrfy",
+      "propertyType": "msg",
+      "rules": [
+          {
+              "t": "true"
+          },
+          {
+              "t": "false"
+          }
       ],
-      [
-        "b13de4d1.b30438"
+      "checkall": "true",
+      "repair": false,
+      "outputs": 2,
+      "x": 400,
+      "y": 140,
+      "wires": [
+          [
+              "94cddeb6.bc2d3",
+              "bd15ef87.1979b"
+          ],
+          [
+              "b13de4d1.b30438"
+          ]
       ]
-    ]
   },
   {
-    "id": "94cddeb6.bc2d3",
-    "type": "function",
-    "z": "15570129.70a46f",
-    "name": "orbit",
-    "func": "const TOKEN=env.get('ORBIT_TOKEN')\nconst url = 'https://app.orbit.love/questdb/activities?api_key=' + TOKEN\nconst orbit = {\n  \"title\": \"Auto-Star\",\n  \"description\": (msg.payload.action === 'deleted' ? \"UNStarred repository \" : \"Starred Repository \") + msg.payload.content.repository.name,\n  \"link\": msg.payload.content.repository.html_url,\n  \"score\": 2,\n  \"activity_type\": \"repository:star\",\n  \"occurred_at\": msg.payload.content.starred_at,\n\t\"member\": {\n    \"github\": msg.payload.content.sender.login,\n    \"email\": \"\"\n\t}\n}\nvar headers = {}\nheaders[\"Content-Type\"] = \"application/json\"\nheaders[\"Accept\"] = \"application/json\"\nmsg.url = url\nmsg.payload = orbit\nmsg.headers = headers\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 610,
-    "y": 260,
-    "wires": [
-      [
-        "2b55a7b0.33edf",
-        "eefc6f11.40d49"
+      "id": "94cddeb6.bc2d3",
+      "type": "function",
+      "z": "15570129.70a46f",
+      "name": "Orbit MSG",
+      "func": "const TOKEN=env.get('ORBIT_TOKEN')\nconst url = 'https://app.orbit.love/questdb/activities?api_key=' + TOKEN\nvar orbit = {}\nif(msg.payload.action) {\n    orbit = {\n        \"title\": \"Auto-Star\",\n        \"description\": (msg.payload.action === 'deleted' ? \"UNStarred repository \" : \"Starred Repository \") + msg.payload.content.repository.name,\n        \"link\": msg.payload.content.repository.html_url,\n        \"score\": 2,\n        \"activity_type\": \"repository:star\",\n        \"occurred_at\": msg.payload.content.starred_at,\n\t    \"member\": {\n            \"github\": msg.payload.content.sender.login,\n            \"email\": \"\"\n\t    }\n    }\n} else {\n    \n    orbit = {\n        \"title\": (msg.payload.SlackAction.event_type == \"member_joined_channel\" ? \"Channel Joined\" : \"Left Channel\"),\n        \"description\": (msg.payload.SlackAction.event_type == \"member_joined_channel\" ? \"Joined Channel \" : \"Left Channel \") + msg.payload.SlackChannel.channel.name,\n        \"activity_type\": \"slack channel:\" + (msg.payload.SlackAction.event_type == \"member_joined_channel\" ? \"joined\" : \"left\"),\n        \"score\": 2,\n        \"member\": {\n            //\"bio\": msg.payload.user.profile.title,\n            \"email\":  (msg.payload.SlackUser.user.profile.email ? msg.payload.SlackUser.user.profile.email : ''),\n            \"name\": (msg.payload.SlackUser.user.profile.display_name ? msg.payload.SlackUser.user.profile.display_name : '')\n        }\n    }\n}\nvar headers = {}\n\nmsg.url = url\nmsg.payload = orbit\nmsg.headers = {}\nmsg.headers[\"Content-Type\"] = \"application/json\"\nmsg.headers[\"Accept\"] = \"application/json\"\nreturn msg;",
+      "outputs": 1,
+      "noerr": 0,
+      "x": 1190,
+      "y": 100,
+      "wires": [
+          [
+              "2b55a7b0.33edf"
+          ]
       ]
-    ]
   },
   {
-    "id": "2b55a7b0.33edf",
-    "type": "http request",
-    "z": "15570129.70a46f",
-    "name": "POST Orbit",
-    "method": "POST",
-    "ret": "txt",
-    "paytoqs": false,
-    "url": "",
-    "tls": "dfcc6f2.058499",
-    "persist": false,
-    "proxy": "",
-    "authType": "",
-    "x": 770,
-    "y": 320,
-    "wires": [
-      [
-        "8879b1d0.cf03"
+      "id": "2b55a7b0.33edf",
+      "type": "http request",
+      "z": "15570129.70a46f",
+      "name": "Orbit",
+      "method": "POST",
+      "ret": "txt",
+      "paytoqs": false,
+      "url": "",
+      "tls": "dfcc6f2.058499",
+      "persist": false,
+      "proxy": "",
+      "authType": "",
+      "x": 1370,
+      "y": 100,
+      "wires": [
+          [
+              "8879b1d0.cf03"
+          ]
       ]
-    ]
   },
   {
-    "id": "8879b1d0.cf03",
-    "type": "debug",
-    "z": "15570129.70a46f",
-    "name": "Orbit-out",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "payload",
-    "targetType": "msg",
-    "x": 980,
-    "y": 320,
-    "wires": []
+      "id": "8879b1d0.cf03",
+      "type": "debug",
+      "z": "15570129.70a46f",
+      "name": "Orbit-out",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "payload",
+      "targetType": "msg",
+      "x": 1560,
+      "y": 100,
+      "wires": []
   },
   {
-    "id": "d32b49c2.33c8b",
-    "type": "debug",
-    "z": "15570129.70a46f",
-    "name": "Slack-out",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "payload",
-    "targetType": "msg",
-    "x": 960,
-    "y": 200,
-    "wires": []
+      "id": "d32b49c2.33c8b",
+      "type": "debug",
+      "z": "15570129.70a46f",
+      "name": "Slack-out",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "payload",
+      "targetType": "msg",
+      "x": 1560,
+      "y": 60,
+      "wires": []
   },
   {
-    "id": "bd15ef87.1979b",
-    "type": "function",
-    "z": "15570129.70a46f",
-    "name": "Slack",
-    "func": "const ENDPOINT=env.get('SLACK_TOKEN');\nconst url = \"https://hooks.slack.com/services/\" + ENDPOINT\nmsg.url = url\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 600,
-    "y": 200,
-    "wires": [
-      [
-        "eefc6f11.40d49"
+      "id": "bd15ef87.1979b",
+      "type": "function",
+      "z": "15570129.70a46f",
+      "name": "Slack MSG",
+      "func": "const ENDPOINT=env.get('SLACK_TOKEN');\nconst url = \"https://hooks.slack.com/services/\" + ENDPOINT\nmsg.url = url\nreturn msg;",
+      "outputs": 1,
+      "noerr": 0,
+      "x": 1190,
+      "y": 60,
+      "wires": [
+          [
+              "eefc6f11.40d49"
+          ]
       ]
-    ]
+  },
+  {
+      "id": "54d3c789.1e0e28",
+      "type": "http in",
+      "z": "15570129.70a46f",
+      "name": "Slack",
+      "url": "/joiner",
+      "method": "post",
+      "upload": false,
+      "swaggerDoc": "",
+      "x": 90,
+      "y": 280,
+      "wires": [
+          [
+              "7e7b7995.f9b768",
+              "f69a18f8.d1d8c8",
+              "a0abab35.cffb4"
+          ]
+      ]
+  },
+  {
+      "id": "7e7b7995.f9b768",
+      "type": "http response",
+      "z": "15570129.70a46f",
+      "name": "",
+      "statusCode": "",
+      "headers": {},
+      "x": 250,
+      "y": 220,
+      "wires": []
+  },
+  {
+      "id": "f69a18f8.d1d8c8",
+      "type": "function",
+      "z": "15570129.70a46f",
+      "name": "Slack MSG",
+      "func": "var url = 'https://slack.com/api/users.info'\nvar headers = {}\nvar newMsg = {}\nheaders[\"Content-Type\"] = \"application/x-www-form-urlencoded\"\nconst token = env.getenv('SLACK_USER_TOKEN')\nconst user = msg.payload.event.user\nurl += \"?token=\" + token\nurl += \"&user=\" + user\n// msg.payload.event.user\nnewMsg.url = url\nnewMsg.payload = {}\nnewMsg.payload.token = token\nnewMsg.payload.user = user\nnewMsg.payload.event_type = msg.payload.event.type\nnewMsg.headers=headers\nnewMsg.output = 1\nreturn newMsg;\n\n",
+      "outputs": 1,
+      "noerr": 0,
+      "x": 270,
+      "y": 280,
+      "wires": [
+          [
+              "aa5edbc.6b66e28",
+              "816138e5.91a54"
+          ]
+      ]
+  },
+  {
+      "id": "cc6f32e.4acf85",
+      "type": "http request",
+      "z": "15570129.70a46f",
+      "name": "Query Slack User",
+      "method": "GET",
+      "ret": "txt",
+      "paytoqs": false,
+      "url": "",
+      "tls": "dfcc6f2.058499",
+      "persist": false,
+      "proxy": "",
+      "authType": "",
+      "x": 650,
+      "y": 320,
+      "wires": [
+          [
+              "f674656.d386418"
+          ]
+      ]
+  },
+  {
+      "id": "f674656.d386418",
+      "type": "json",
+      "z": "15570129.70a46f",
+      "name": "",
+      "property": "payload",
+      "action": "",
+      "pretty": false,
+      "x": 850,
+      "y": 320,
+      "wires": [
+          [
+              "937deb02.782b7"
+          ]
+      ]
+  },
+  {
+      "id": "aa5edbc.6b66e28",
+      "type": "switch",
+      "z": "15570129.70a46f",
+      "name": "",
+      "property": "output",
+      "propertyType": "msg",
+      "rules": [
+          {
+              "t": "eq",
+              "v": "1",
+              "vt": "str"
+          },
+          {
+              "t": "eq",
+              "v": "2",
+              "vt": "str"
+          }
+      ],
+      "checkall": "false",
+      "repair": false,
+      "outputs": 2,
+      "x": 450,
+      "y": 340,
+      "wires": [
+          [
+              "cc6f32e.4acf85"
+          ],
+          [
+              "3b1a0d68.887f6a"
+          ]
+      ]
+  },
+  {
+      "id": "a0abab35.cffb4",
+      "type": "function",
+      "z": "15570129.70a46f",
+      "name": "Slack Channel",
+      "func": "var url = 'https://slack.com/api/conversations.info'\nvar headers = {}\nvar newMsg = {}\nheaders[\"Content-Type\"] = \"application/x-www-form-urlencoded\"\nconst token = env.getenv('SLACK_USER_TOKEN')\nconst user = msg.payload.event.user\nurl += \"?token=\" + token\nurl += \"&channel=\" + msg.payload.event.channel\nnewMsg.url = url\nnewMsg.payload = {}\nnewMsg.payload.token = token\nnewMsg.payload.user = user\nnewMsg.payload.event_type =  msg.payload.event.type\nnewMsg.headers=headers\nnewMsg.output = 2\nreturn newMsg;\n\n",
+      "outputs": 1,
+      "noerr": 0,
+      "x": 280,
+      "y": 340,
+      "wires": [
+          [
+              "aa5edbc.6b66e28"
+          ]
+      ]
+  },
+  {
+      "id": "3b1a0d68.887f6a",
+      "type": "http request",
+      "z": "15570129.70a46f",
+      "name": "Query Slack Channel",
+      "method": "GET",
+      "ret": "txt",
+      "paytoqs": false,
+      "url": "",
+      "tls": "dfcc6f2.058499",
+      "persist": false,
+      "proxy": "",
+      "authType": "",
+      "x": 660,
+      "y": 360,
+      "wires": [
+          [
+              "142013cd.56dc44"
+          ]
+      ]
+  },
+  {
+      "id": "142013cd.56dc44",
+      "type": "json",
+      "z": "15570129.70a46f",
+      "name": "",
+      "property": "payload",
+      "action": "",
+      "pretty": false,
+      "x": 850,
+      "y": 360,
+      "wires": [
+          [
+              "6f4c7e48.ef868"
+          ]
+      ]
+  },
+  {
+      "id": "816138e5.91a54",
+      "type": "change",
+      "z": "15570129.70a46f",
+      "name": "Action",
+      "rules": [
+          {
+              "t": "set",
+              "p": "topic",
+              "pt": "msg",
+              "to": "SlackAction",
+              "tot": "str"
+          }
+      ],
+      "action": "",
+      "property": "",
+      "from": "",
+      "to": "",
+      "reg": false,
+      "x": 450,
+      "y": 280,
+      "wires": [
+          [
+              "162cb6d5.0c57f9"
+          ]
+      ]
+  },
+  {
+      "id": "937deb02.782b7",
+      "type": "change",
+      "z": "15570129.70a46f",
+      "name": "User",
+      "rules": [
+          {
+              "t": "set",
+              "p": "topic",
+              "pt": "msg",
+              "to": "SlackUser",
+              "tot": "str"
+          }
+      ],
+      "action": "",
+      "property": "",
+      "from": "",
+      "to": "",
+      "reg": false,
+      "x": 1010,
+      "y": 320,
+      "wires": [
+          [
+              "162cb6d5.0c57f9"
+          ]
+      ]
+  },
+  {
+      "id": "6f4c7e48.ef868",
+      "type": "change",
+      "z": "15570129.70a46f",
+      "name": "Channel",
+      "rules": [
+          {
+              "t": "set",
+              "p": "topic",
+              "pt": "msg",
+              "to": "SlackChannel",
+              "tot": "str"
+          }
+      ],
+      "action": "",
+      "property": "",
+      "from": "",
+      "to": "",
+      "reg": false,
+      "x": 1020,
+      "y": 360,
+      "wires": [
+          [
+              "162cb6d5.0c57f9"
+          ]
+      ]
+  },
+  {
+      "id": "162cb6d5.0c57f9",
+      "type": "join",
+      "z": "15570129.70a46f",
+      "name": "",
+      "mode": "custom",
+      "build": "object",
+      "property": "payload",
+      "propertyType": "msg",
+      "key": "topic",
+      "joiner": "\\n",
+      "joinerType": "str",
+      "accumulate": false,
+      "timeout": "",
+      "count": "3",
+      "reduceRight": false,
+      "reduceExp": "",
+      "reduceInit": "",
+      "reduceInitType": "",
+      "reduceFixup": "",
+      "x": 1010,
+      "y": 200,
+      "wires": [
+          [
+              "94cddeb6.bc2d3"
+          ]
+      ]
+  },
+  {
+      "id": "dfcc6f2.058499",
+      "type": "tls-config",
+      "z": "",
+      "name": "",
+      "cert": "",
+      "key": "",
+      "ca": "",
+      "certname": "",
+      "keyname": "",
+      "caname": "",
+      "verifyservercert": false
   }
 ]
